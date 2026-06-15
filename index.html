@@ -1,11 +1,455 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Invitación</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reto 6 - Multiplicación</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Comic Sans MS", "Trebuchet MS", Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, #ffe6f3, transparent 35%),
+        radial-gradient(circle at bottom right, #dff6ff, transparent 35%),
+        linear-gradient(135deg, #fff4c7, #ffd6ec, #d8f7ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    .decoracion {
+      position: fixed;
+      font-size: 42px;
+      opacity: 0.35;
+      animation: flotar 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .d1 { top: 8%; left: 8%; }
+    .d2 { top: 14%; right: 10%; animation-delay: 1s; }
+    .d3 { bottom: 12%; left: 9%; animation-delay: 2s; }
+    .d4 { bottom: 10%; right: 12%; animation-delay: 1.5s; }
+    .d5 { top: 50%; left: 4%; animation-delay: .7s; }
+    .d6 { top: 48%; right: 5%; animation-delay: 2.3s; }
+
+    @keyframes flotar {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-16px) rotate(8deg); }
+    }
+
+    .tarjeta {
+      width: 100%;
+      max-width: 900px;
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 35px;
+      padding: 35px 28px;
+      text-align: center;
+      box-shadow: 0 20px 45px rgba(95, 80, 160, 0.25);
+      border: 5px solid rgba(255, 255, 255, 0.9);
+      animation: aparecer 0.8s ease;
+    }
+
+    @keyframes aparecer {
+      from {
+        transform: scale(0.9);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .etiqueta {
+      display: inline-block;
+      background: linear-gradient(135deg, #7b61ff, #ff7eb3);
+      color: white;
+      padding: 10px 24px;
+      border-radius: 30px;
+      font-size: 18px;
+      font-weight: bold;
+      box-shadow: 0 5px 0 #5b43c8;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      color: #7b61ff;
+      font-size: clamp(32px, 6vw, 55px);
+      margin-bottom: 10px;
+      text-shadow: 3px 3px 0 #ebe6ff;
+    }
+
+    .subtitulo {
+      color: #6b3d7a;
+      font-size: clamp(18px, 3vw, 26px);
+      font-weight: bold;
+      margin-bottom: 25px;
+    }
+
+    .pregunta {
+      background: linear-gradient(135deg, #f0edff, #fff2fb);
+      border: 3px dashed #9c8cff;
+      border-radius: 25px;
+      padding: 25px;
+      margin: 25px 0;
+      color: #333;
+      font-size: clamp(22px, 4vw, 32px);
+      line-height: 1.4;
+      font-weight: bold;
+    }
+
+    .operacion-grande {
+      margin-top: 15px;
+      display: inline-block;
+      background: #fff7d6;
+      border: 3px solid #ffd15c;
+      color: #5b3d00;
+      padding: 14px 24px;
+      border-radius: 22px;
+      font-size: clamp(30px, 6vw, 50px);
+      box-shadow: 0 6px 0 #e7b83e;
+    }
+
+    .tablero {
+      margin: 28px auto;
+      background: #f7fbff;
+      border: 4px solid #b7e7ff;
+      border-radius: 28px;
+      padding: 22px;
+      max-width: 780px;
+    }
+
+    .letrero {
+      width: 80%;
+      margin: 0 auto 22px;
+      background: linear-gradient(135deg, #42c6ff, #7b61ff);
+      color: white;
+      padding: 12px;
+      border-radius: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      box-shadow: 0 5px 0 #3c76b8;
+    }
+
+    .casillas {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+    }
+
+    .casilla {
+      min-height: 70px;
+      background: linear-gradient(135deg, #ffffff, #eaf8ff);
+      border: 3px solid #9bdcff;
+      border-radius: 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
+      font-weight: bold;
+      color: #37627a;
+      position: relative;
+      box-shadow: 0 5px 0 #b7dff2;
+    }
+
+    .casilla.inicio {
+      background: linear-gradient(135deg, #fff7d6, #ffe79c);
+      border-color: #ffd15c;
+    }
+
+    .casilla.meta {
+      background: linear-gradient(135deg, #d9ffe0, #90f3a3);
+      border-color: #48d865;
+    }
+
+    .jugador {
+      position: absolute;
+      font-size: 34px;
+      animation: saltar 0.7s ease infinite alternate;
+    }
+
+    @keyframes saltar {
+      from { transform: translateY(0); }
+      to { transform: translateY(-6px); }
+    }
+
+    .opciones {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(120px, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .opcion {
+      border: none;
+      background: linear-gradient(135deg, #55c7ff, #2c98dd);
+      color: white;
+      padding: 18px;
+      border-radius: 22px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 7px 0 #176fa6;
+      transition: 0.2s;
+    }
+
+    .opcion:hover {
+      transform: scale(1.04);
+    }
+
+    .opcion:active {
+      transform: translateY(5px);
+      box-shadow: 0 2px 0 #176fa6;
+    }
+
+    .opcion.correcta {
+      background: linear-gradient(135deg, #70e887, #28c76f);
+      box-shadow: 0 7px 0 #1c9850;
+    }
+
+    .opcion.incorrecta {
+      background: linear-gradient(135deg, #ff8080, #ff4d6d);
+      box-shadow: 0 7px 0 #c12e43;
+    }
+
+    .opcion:disabled {
+      cursor: not-allowed;
+      opacity: 0.85;
+    }
+
+    .mensaje {
+      margin-top: 25px;
+      padding: 24px;
+      border-radius: 25px;
+      font-size: clamp(21px, 4vw, 31px);
+      font-weight: bold;
+      display: none;
+      animation: mensajeAparece 0.6s ease;
+    }
+
+    .mensaje.exito {
+      display: block;
+      background: linear-gradient(135deg, #7ee8a4, #28c76f);
+      color: white;
+      box-shadow: 0 8px 0 #1c9850;
+    }
+
+    .mensaje.error {
+      display: block;
+      background: linear-gradient(135deg, #ff9898, #ff5c7a);
+      color: white;
+      box-shadow: 0 8px 0 #c12e43;
+    }
+
+    @keyframes mensajeAparece {
+      from {
+        transform: scale(0.75) rotate(-3deg);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1) rotate(0);
+        opacity: 1;
+      }
+    }
+
+    .resultado {
+      margin-top: 12px;
+      background: rgba(255,255,255,0.28);
+      padding: 12px;
+      border-radius: 18px;
+      font-size: clamp(22px, 5vw, 36px);
+      font-weight: bold;
+    }
+
+    .boton-reiniciar {
+      display: none;
+      margin-top: 22px;
+      border: none;
+      background: linear-gradient(135deg, #ff9ad5, #ffb347);
+      color: white;
+      padding: 15px 30px;
+      border-radius: 30px;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #d66d96;
+    }
+
+    .boton-reiniciar.visible {
+      display: inline-block;
+    }
+
+    @media (max-width: 600px) {
+      .tarjeta {
+        padding: 28px 18px;
+      }
+
+      .letrero {
+        width: 100%;
+        font-size: 20px;
+      }
+
+      .casillas {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .casilla {
+        min-height: 60px;
+        font-size: 15px;
+      }
+
+      .opciones {
+        grid-template-columns: 1fr;
+      }
+
+      .opcion {
+        font-size: 25px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Invitación en línea</h1>
-  <p>Esta página está activa correctamente.</p>
+  <div class="decoracion d1">🎲</div>
+  <div class="decoracion d2">🧠</div>
+  <div class="decoracion d3">⭐</div>
+  <div class="decoracion d4">🚀</div>
+  <div class="decoracion d5">🎈</div>
+  <div class="decoracion d6">✨</div>
+
+  <main class="tarjeta">
+    <div class="etiqueta">Reto 6 de 8</div>
+
+    <h1>Desafío Matemático</h1>
+
+    <p class="subtitulo">Resuelve y mueve tu ficha en el tablero</p>
+
+    <section class="pregunta">
+      Resuelve el siguiente ejercicio:
+      <br>
+      <div class="operacion-grande">322 × 25</div>
+    </section>
+
+    <section class="tablero">
+      <div class="letrero">TABLERO DEL RETO</div>
+      <div class="casillas" id="casillas"></div>
+    </section>
+
+    <section class="opciones">
+      <button class="opcion" onclick="responder(this, 7550)">7550</button>
+      <button class="opcion" onclick="responder(this, 8050)">8050</button>
+      <button class="opcion" onclick="responder(this, 8250)">8250</button>
+      <button class="opcion" onclick="responder(this, 8025)">8025</button>
+    </section>
+
+    <div class="mensaje" id="mensaje"></div>
+
+    <button class="boton-reiniciar" id="reiniciar" onclick="reiniciarJuego()">
+      Intentar otra vez
+    </button>
+  </main>
+
+  <script>
+    const contenedorCasillas = document.getElementById("casillas");
+    const mensaje = document.getElementById("mensaje");
+    const botonReiniciar = document.getElementById("reiniciar");
+    const opciones = document.querySelectorAll(".opcion");
+
+    const respuestaCorrecta = 8050;
+    let posicionJugador = 3;
+    const totalCasillas = 14;
+
+    function crearTablero() {
+      contenedorCasillas.innerHTML = "";
+
+      for (let i = 1; i <= totalCasillas; i++) {
+        const casilla = document.createElement("div");
+        casilla.classList.add("casilla");
+
+        if (i === 1) casilla.classList.add("inicio");
+        if (i === totalCasillas) casilla.classList.add("meta");
+
+        casilla.textContent = i;
+
+        if (i === posicionJugador) {
+          const jugador = document.createElement("div");
+          jugador.classList.add("jugador");
+          jugador.textContent = "🐰";
+          casilla.appendChild(jugador);
+        }
+
+        contenedorCasillas.appendChild(casilla);
+      }
+    }
+
+    function responder(boton, respuesta) {
+      bloquearOpciones();
+
+      if (respuesta === respuestaCorrecta) {
+        boton.classList.add("correcta");
+        posicionJugador = Math.min(posicionJugador + 2, totalCasillas);
+        crearTablero();
+
+        mensaje.className = "mensaje exito";
+        mensaje.innerHTML = `
+          🎉 ¡Correcto! Avanza 2 casillas.
+          <div class="resultado">322 × 25 = 8050</div>
+        `;
+      } else {
+        boton.classList.add("incorrecta");
+        marcarCorrecta();
+        posicionJugador = Math.max(posicionJugador - 2, 1);
+        crearTablero();
+
+        mensaje.className = "mensaje error";
+        mensaje.innerHTML = `
+          ❌ Incorrecto. Retrocede 2 casillas.
+          <div class="resultado">La respuesta correcta era 8050</div>
+          <div class="resultado">322 × 25 = 8050</div>
+        `;
+      }
+
+      botonReiniciar.classList.add("visible");
+    }
+
+    function bloquearOpciones() {
+      opciones.forEach(opcion => {
+        opcion.disabled = true;
+      });
+    }
+
+    function marcarCorrecta() {
+      opciones.forEach(opcion => {
+        if (opcion.textContent.trim() === "8050") {
+          opcion.classList.add("correcta");
+        }
+      });
+    }
+
+    function reiniciarJuego() {
+      posicionJugador = 3;
+      mensaje.className = "mensaje";
+      mensaje.innerHTML = "";
+      botonReiniciar.classList.remove("visible");
+
+      opciones.forEach(opcion => {
+        opcion.disabled = false;
+        opcion.classList.remove("correcta", "incorrecta");
+      });
+
+      crearTablero();
+    }
+
+    crearTablero();
+  </script>
 </body>
 </html>
