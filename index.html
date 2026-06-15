@@ -42,13 +42,17 @@
     .d6 { top: 48%; right: 5%; animation-delay: 2.3s; }
 
     @keyframes flotar {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-16px) rotate(8deg); }
+      0%, 100% {
+        transform: translateY(0) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-16px) rotate(8deg);
+      }
     }
 
     .tarjeta {
       width: 100%;
-      max-width: 900px;
+      max-width: 880px;
       background: rgba(255, 255, 255, 0.96);
       border-radius: 35px;
       padding: 35px 28px;
@@ -99,7 +103,7 @@
       background: linear-gradient(135deg, #f0edff, #fff2fb);
       border: 3px dashed #9c8cff;
       border-radius: 25px;
-      padding: 25px;
+      padding: 28px;
       margin: 25px 0;
       color: #333;
       font-size: clamp(22px, 4vw, 32px);
@@ -108,78 +112,100 @@
     }
 
     .operacion-grande {
-      margin-top: 15px;
+      margin-top: 18px;
       display: inline-block;
       background: #fff7d6;
       border: 3px solid #ffd15c;
       color: #5b3d00;
-      padding: 14px 24px;
-      border-radius: 22px;
-      font-size: clamp(30px, 6vw, 50px);
+      padding: 16px 28px;
+      border-radius: 24px;
+      font-size: clamp(34px, 7vw, 58px);
       box-shadow: 0 6px 0 #e7b83e;
     }
 
-    .tablero {
-      margin: 28px auto;
-      background: #f7fbff;
-      border: 4px solid #b7e7ff;
+    .zona-visual {
+      margin: 25px auto;
+      background: #f8f7ff;
+      border: 4px solid #c5bdff;
       border-radius: 28px;
-      padding: 22px;
-      max-width: 780px;
+      padding: 24px;
+      max-width: 760px;
     }
 
     .letrero {
       width: 80%;
       margin: 0 auto 22px;
-      background: linear-gradient(135deg, #42c6ff, #7b61ff);
+      background: linear-gradient(135deg, #7b61ff, #42c6ff);
       color: white;
       padding: 12px;
       border-radius: 20px;
       font-size: 24px;
       font-weight: bold;
-      box-shadow: 0 5px 0 #3c76b8;
+      box-shadow: 0 5px 0 #5b43c8;
     }
 
-    .casillas {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 10px;
-    }
-
-    .casilla {
-      min-height: 70px;
-      background: linear-gradient(135deg, #ffffff, #eaf8ff);
-      border: 3px solid #9bdcff;
-      border-radius: 18px;
+    .numeros {
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 18px;
-      font-weight: bold;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .numero-caja {
+      background: linear-gradient(135deg, #ffffff, #eaf8ff);
+      border: 4px solid #9bdcff;
       color: #37627a;
-      position: relative;
-      box-shadow: 0 5px 0 #b7dff2;
+      padding: 20px 30px;
+      border-radius: 25px;
+      font-size: clamp(34px, 7vw, 60px);
+      font-weight: bold;
+      box-shadow: 0 7px 0 #b7dff2;
+      animation: saltito 2s ease-in-out infinite;
     }
 
-    .casilla.inicio {
-      background: linear-gradient(135deg, #fff7d6, #ffe79c);
-      border-color: #ffd15c;
+    .signo {
+      font-size: clamp(38px, 7vw, 65px);
+      color: #ff7eb3;
+      font-weight: bold;
+      animation: girar 2.5s ease-in-out infinite;
     }
 
-    .casilla.meta {
-      background: linear-gradient(135deg, #d9ffe0, #90f3a3);
-      border-color: #48d865;
+    @keyframes saltito {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-7px);
+      }
     }
 
-    .jugador {
-      position: absolute;
-      font-size: 34px;
-      animation: saltar 0.7s ease infinite alternate;
+    @keyframes girar {
+      0%, 100% {
+        transform: rotate(0deg) scale(1);
+      }
+      50% {
+        transform: rotate(8deg) scale(1.1);
+      }
     }
 
-    @keyframes saltar {
-      from { transform: translateY(0); }
-      to { transform: translateY(-6px); }
+    .ayuda {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin: 22px 0;
+    }
+
+    .dato {
+      background: #eef0ff;
+      border: 3px solid #a99dff;
+      color: #3e347a;
+      border-radius: 18px;
+      padding: 13px 18px;
+      font-size: 20px;
+      font-weight: bold;
+      box-shadow: 0 5px 0 #8172d9;
     }
 
     .opciones {
@@ -261,12 +287,21 @@
       }
     }
 
+    .movimiento {
+      margin-top: 14px;
+      background: rgba(255,255,255,0.32);
+      padding: 14px;
+      border-radius: 18px;
+      font-size: clamp(22px, 5vw, 36px);
+      font-weight: bold;
+    }
+
     .resultado {
       margin-top: 12px;
       background: rgba(255,255,255,0.28);
       padding: 12px;
       border-radius: 18px;
-      font-size: clamp(22px, 5vw, 36px);
+      font-size: clamp(21px, 4vw, 32px);
       font-weight: bold;
     }
 
@@ -298,21 +333,16 @@
         font-size: 20px;
       }
 
-      .casillas {
-        grid-template-columns: repeat(4, 1fr);
-      }
-
-      .casilla {
-        min-height: 60px;
-        font-size: 15px;
-      }
-
       .opciones {
         grid-template-columns: 1fr;
       }
 
       .opcion {
         font-size: 25px;
+      }
+
+      .dato {
+        font-size: 17px;
       }
     }
   </style>
@@ -331,7 +361,7 @@
 
     <h1>Desafío Matemático</h1>
 
-    <p class="subtitulo">Resuelve y mueve tu ficha en el tablero</p>
+    <p class="subtitulo">Elige la respuesta correcta para saber si avanzas o retrocedes</p>
 
     <section class="pregunta">
       Resuelve el siguiente ejercicio:
@@ -339,9 +369,22 @@
       <div class="operacion-grande">322 × 25</div>
     </section>
 
-    <section class="tablero">
-      <div class="letrero">TABLERO DEL RETO</div>
-      <div class="casillas" id="casillas"></div>
+    <div class="ayuda">
+      <div class="dato">Lee con atención</div>
+      <div class="dato">Calcula la respuesta</div>
+      <div class="dato">Elige una opción</div>
+    </div>
+
+    <section class="zona-visual">
+      <div class="letrero">RETO DE MULTIPLICACIÓN</div>
+
+      <div class="numeros">
+        <div class="numero-caja">322</div>
+        <div class="signo">×</div>
+        <div class="numero-caja">25</div>
+        <div class="signo">=</div>
+        <div class="numero-caja">?</div>
+      </div>
     </section>
 
     <section class="opciones">
@@ -359,60 +402,32 @@
   </main>
 
   <script>
-    const contenedorCasillas = document.getElementById("casillas");
     const mensaje = document.getElementById("mensaje");
     const botonReiniciar = document.getElementById("reiniciar");
     const opciones = document.querySelectorAll(".opcion");
 
     const respuestaCorrecta = 8050;
-    let posicionJugador = 3;
-    const totalCasillas = 14;
-
-    function crearTablero() {
-      contenedorCasillas.innerHTML = "";
-
-      for (let i = 1; i <= totalCasillas; i++) {
-        const casilla = document.createElement("div");
-        casilla.classList.add("casilla");
-
-        if (i === 1) casilla.classList.add("inicio");
-        if (i === totalCasillas) casilla.classList.add("meta");
-
-        casilla.textContent = i;
-
-        if (i === posicionJugador) {
-          const jugador = document.createElement("div");
-          jugador.classList.add("jugador");
-          jugador.textContent = "🐰";
-          casilla.appendChild(jugador);
-        }
-
-        contenedorCasillas.appendChild(casilla);
-      }
-    }
 
     function responder(boton, respuesta) {
       bloquearOpciones();
 
       if (respuesta === respuestaCorrecta) {
         boton.classList.add("correcta");
-        posicionJugador = Math.min(posicionJugador + 2, totalCasillas);
-        crearTablero();
 
         mensaje.className = "mensaje exito";
         mensaje.innerHTML = `
-          🎉 ¡Correcto! Avanza 2 casillas.
+          🎉 ¡Correcto!
+          <div class="movimiento">Avanza 2 casillas</div>
           <div class="resultado">322 × 25 = 8050</div>
         `;
       } else {
         boton.classList.add("incorrecta");
         marcarCorrecta();
-        posicionJugador = Math.max(posicionJugador - 2, 1);
-        crearTablero();
 
         mensaje.className = "mensaje error";
         mensaje.innerHTML = `
-          ❌ Incorrecto. Retrocede 2 casillas.
+          ❌ Incorrecto.
+          <div class="movimiento">Retrocede 2 casillas</div>
           <div class="resultado">La respuesta correcta era 8050</div>
           <div class="resultado">322 × 25 = 8050</div>
         `;
@@ -436,7 +451,6 @@
     }
 
     function reiniciarJuego() {
-      posicionJugador = 3;
       mensaje.className = "mensaje";
       mensaje.innerHTML = "";
       botonReiniciar.classList.remove("visible");
@@ -445,11 +459,7 @@
         opcion.disabled = false;
         opcion.classList.remove("correcta", "incorrecta");
       });
-
-      crearTablero();
     }
-
-    crearTablero();
   </script>
 </body>
 </html>
